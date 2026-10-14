@@ -1,0 +1,29 @@
+﻿name: TA102x25+5'-16k Equipment Hauler
+sku: GHDEF2.1
+category: deckover
+price: 32661
+thumb: main
+specs: 🆕 New 2027 Triumph
+
+GHDEF2.1 TA102x25+5'-16k Equipment Hauler Pintle Outfitted
+
+Features:
+Tandem 16k Axles
+Electric Brakes
+Galvanized Build
+GVWR: 35,200 lbs
+Load Rating: 27,170 lbs
+
+🛡️ Warranty:
+Structural: 1 Year
+Axles: 5 Years
+Lights: Lifetime
+
+Optional Addons:
+Tandem 12k Hydraulic Jacks $2,368+HST
+Hutch Suspension $1,868+HST
+Side Winch Tracking with 5 Straps $943+HST
+Hydraulic Brakes Upgrade (16k) $3,250+HST
+Undermount Toolboxes $650+HST
+Spare Tire (16k axle) $416+HST
+10k-22k Lbs Winches ($1560-$3250+HST)

@@ -1,0 +1,750 @@
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:   #0b1a2e;
+  --dark:    #13263f;
+  --mid:     #1c3352;
+  --orange:  #f5c518;   /* accent: safety yellow (name kept so every reference still works) */
+  --orange2: #ffd84d;
+  --on-accent: #1a1300; /* text on the yellow accent - white on yellow is unreadable */
+  --light:   #f5f5f5;
+  --white:   #ffffff;
+  --border:  #22395a;
+  --text:    #cfd8e3;
+  --muted:   #8fa1b6;
+  --radius:  6px;
+  --shadow:  0 4px 16px rgba(0,0,0,0.5);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--black);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+a { color: var(--orange); text-decoration: none; transition: color .2s; }
+a:hover { color: var(--orange2); }
+
+img { max-width: 100%; display: block; }
+
+/* ===== SITE PROMO BANNER (only shown when banner.txt has text) ===== */
+.site-banner {
+  background: var(--orange);
+  color: var(--on-accent);
+  text-align: center;
+  font-weight: 700;
+  font-size: .9rem;
+  line-height: 1.45;
+  padding: .6rem 1rem;
+}
+@media (max-width: 600px) {
+  .site-banner { font-size: .8rem; padding: .55rem .8rem; }
+}
+
+/* The one-line nudge to the Deal of the Month, on every other trailer's page */
+.deal-promo {
+  display: flex; align-items: center; gap: .7rem;
+  background: rgba(245,197,24,.1); border: 1px solid var(--orange);
+  border-radius: 8px; padding: .6rem .85rem; margin: 0 0 1rem;
+  text-decoration: none; transition: background .15s;
+}
+.deal-promo:hover { background: rgba(245,197,24,.2); }
+.deal-promo-leaf { font-size: 1.15rem; line-height: 1; }
+.deal-promo-text { flex: 1 1 auto; min-width: 0; color: var(--white); font-size: .92rem; font-weight: 700; line-height: 1.3; }
+.deal-promo-sub { display: block; color: var(--orange); font-size: .82rem; font-weight: 600; margin-top: .15rem; }
+.deal-promo-go { color: var(--orange); font-size: 1.3rem; font-weight: 800; line-height: 1; }
+
+/* ===== DEAL OF THE MONTH =====
+   Homepage feature, card ribbon, and the block on the trailer's own page.
+   All of it disappears when deal.txt is empty. */
+.deal-feature {
+  display: flex; gap: 1.5rem; align-items: center;
+  background: var(--dark); border: 1px solid var(--orange);
+  border-radius: 10px; overflow: hidden; text-decoration: none;
+  margin: 0 1.5rem 1.5rem; padding: 1rem 1.5rem 1rem 1rem;
+  transition: background .15s;
+}
+.deal-feature:hover { background: var(--mid); }
+.deal-media { flex: 0 0 360px; max-width: 45%; }
+.deal-img { width: 100%; height: auto; border-radius: 8px; display: block; }
+.deal-body { flex: 1 1 auto; min-width: 0; }
+.deal-kicker {
+  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+  color: var(--orange); font-size: .78rem; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase; margin-bottom: .5rem;
+}
+.deal-ends {
+  color: var(--muted); font-weight: 600; letter-spacing: .02em;
+  text-transform: none; font-size: .78rem;
+}
+.deal-name { color: var(--white); font-size: 1.45rem; font-weight: 800; line-height: 1.2; margin: 0 0 .6rem; }
+.deal-prices { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.deal-now { color: var(--orange); font-size: 2rem; font-weight: 900; letter-spacing: -.02em; }
+.deal-was { color: var(--muted); font-size: 1.05rem; text-decoration: line-through; }
+.deal-hst { color: var(--muted); font-size: .8rem; }
+.deal-save { color: var(--text); font-size: .95rem; font-weight: 700; margin-top: .3rem; }
+.deal-note { color: var(--muted); font-size: .88rem; line-height: 1.6; margin: .5rem 0 0; }
+.deal-cta { display: inline-block; color: var(--orange); font-size: .9rem; font-weight: 700; margin-top: .9rem; }
+@media (max-width: 760px) {
+  .deal-feature { flex-direction: column; align-items: stretch; gap: 1rem; margin: 0 1rem 1.25rem; padding: 1rem; }
+  .deal-media { flex: none; max-width: 100%; }
+  .deal-name { font-size: 1.2rem; }
+  .deal-now { font-size: 1.7rem; }
+}
+
+/* Card ribbon + struck-through old price on the deal's card */
+.tc-deal-badge {
+  position: absolute; top: .6rem; left: .6rem; z-index: 2;
+  background: var(--orange); color: var(--on-accent);
+  font-size: .68rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase;
+  padding: .25rem .55rem; border-radius: 4px;
+}
+.tc-was { color: var(--muted); font-size: .8rem; font-weight: 600; text-decoration: line-through; }
+
+/* The block on the deal trailer's own page */
+.t-deal {
+  background: rgba(245,197,24,.1); border: 1px solid var(--orange);
+  border-radius: 8px; padding: .85rem 1rem; margin: 0 0 .9rem;
+}
+.t-deal-title { color: var(--orange); font-size: .78rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.t-deal-save { color: var(--white); font-size: 1.05rem; font-weight: 800; margin-top: .25rem; }
+.t-deal-note, .t-deal-ends { color: var(--muted); font-size: .85rem; margin-top: .3rem; line-height: 1.5; }
+.t-was { color: var(--muted); font-size: .95rem; text-decoration: line-through; margin-left: .1rem; }
+
+/* ===== "OTHER LENGTHS OF THIS MODEL" STRIP =====
+   Only appears on a trailer whose model line has more than one length. */
+.sib-strip {
+  border: 1px solid var(--border); border-radius: 8px;
+  background: var(--dark); margin: 1.25rem 0 0; overflow: hidden;
+}
+.sib-title {
+  font-size: .72rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--muted); padding: .7rem .95rem .55rem;
+}
+.sib-row {
+  display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
+  padding: .6rem .95rem; border-top: 1px solid var(--border);
+  text-decoration: none; color: var(--text); font-size: .875rem;
+}
+a.sib-row:hover { background: var(--mid); color: var(--white); }
+.sib-row .sib-name { flex: 1 1 auto; min-width: 0; }
+a.sib-row .sib-name { color: var(--orange); }
+.sib-row .sib-price { font-weight: 700; white-space: nowrap; }
+.sib-self { background: rgba(245,197,24,.07); }
+.sib-self .sib-here {
+  flex-basis: 100%; font-size: .74rem; color: var(--muted);
+}
+
+/* ===== "WHY TRIUMPH" NAV LINK =====
+   Two words, so it wraps onto two lines and shoves the rest of the header
+   around unless it is told not to. On a phone the header is already tight -
+   the link is dropped there and lives in the footer instead. */
+.nav-about, .p-nav-links a { white-space: nowrap; }
+@media (max-width: 820px) {
+  /* !important is deliberate: index.html's own phone media query gives every
+     non-CTA nav link display:inline-flex for a 44px tap target, and that rule
+     sits later in the cascade with equal specificity, so without it the link
+     reappears on phones. */
+  .home-nav-links a[href="triumph-trailers-ontario.html"],
+  .p-nav-links a[href="triumph-trailers-ontario.html"] { display: none !important; }
+}
+
+/* ===== SEASONAL SALE BANNER (sale-banner.txt; homepage + category pages) ===== */
+.sale-banner {
+  display: block;
+  background: linear-gradient(90deg, #0f2240 0%, #1f3d66 50%, #0f2240 100%);
+  border-bottom: 2px solid var(--orange);
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  font-size: .95rem;
+  line-height: 1.4;
+  padding: .6rem 1rem;
+  text-decoration: none;
+  text-shadow: 0 1px 2px rgba(0,0,0,.35);
+}
+.sale-banner:hover, .sale-banner:focus { color: #fff; filter: brightness(1.08); }
+.sale-banner .sale-hi { font-weight: 800; letter-spacing: .12em; color: var(--orange); }
+.sale-banner .sale-phone {
+  display: inline-block;
+  white-space: nowrap;
+  margin-left: .9rem;
+  padding: .05rem .6rem;
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 4px;
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  .sale-banner { font-size: .85rem; padding: .55rem .8rem; }
+  .sale-banner .sale-phone { display: table; margin: .35rem auto 0; }
+}
+
+/* ===== UTILITY ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+.btn {
+  display: inline-block;
+  padding: .75rem 1.75rem;
+  background: var(--orange);
+  color: var(--on-accent);
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: .95rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  border: 2px solid var(--orange);
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.btn:hover { background: transparent; color: var(--orange); }
+.btn-outline {
+  background: transparent;
+  color: var(--orange);
+}
+.btn-outline:hover { background: var(--orange); color: var(--on-accent); }
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: .5rem;
+  letter-spacing: -.02em;
+}
+.section-sub {
+  color: var(--muted);
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+}
+.accent { color: var(--orange); }
+
+/* ===== TOPBAR ===== */
+.topbar {
+  background: var(--orange);
+  text-align: center;
+  padding: .5rem 1rem;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--on-accent);
+  letter-spacing: .04em;
+}
+.topbar a { color: var(--white); text-decoration: underline; }
+
+/* ===== HEADER / NAV ===== */
+header {
+  background: var(--dark);
+  border-bottom: 2px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  color: var(--white);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+.logo span { color: var(--orange); }
+.logo-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--orange);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+nav ul a {
+  color: var(--text);
+  font-weight: 600;
+  font-size: .95rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  padding: .25rem 0;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+}
+nav ul a:hover, nav ul a.active { color: var(--white); border-bottom-color: var(--orange); }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: .5rem;
+  background: none;
+  border: none;
+}
+.hamburger span {
+  display: block;
+  width: 26px;
+  height: 2px;
+  background: var(--white);
+  transition: all .3s;
+}
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, var(--black) 0%, #0f2240 60%, #13263f 100%);
+  padding: 5rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 3px solid var(--orange);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f5c518' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: .5;
+}
+.hero-content {
+  position: relative;
+  max-width: 680px;
+}
+.hero-eyebrow {
+  display: inline-block;
+  background: var(--orange);
+  color: var(--on-accent);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .3rem .9rem;
+  border-radius: 4px;
+  margin-bottom: 1.25rem;
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  margin-bottom: 1.25rem;
+}
+.hero p {
+  font-size: 1.15rem;
+  color: var(--text);
+  margin-bottom: 2rem;
+  max-width: 540px;
+}
+.hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  margin-top: 3.5rem;
+  flex-wrap: wrap;
+}
+.stat-num {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--orange);
+  display: block;
+}
+.stat-label { font-size: .85rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+/* ===== CATEGORY STRIP ===== */
+.categories {
+  background: var(--dark);
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+.cat-card {
+  background: var(--mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: border-color .2s, transform .2s;
+  cursor: pointer;
+}
+.cat-card:hover { border-color: var(--orange); transform: translateY(-2px); }
+.cat-icon { font-size: 2rem; margin-bottom: .5rem; }
+.cat-name { font-weight: 700; color: var(--white); font-size: .9rem; }
+.cat-count { font-size: .8rem; color: var(--muted); }
+
+/* ===== FEATURED PRODUCTS SECTION ===== */
+.featured { padding: 4rem 0; }
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.product-card {
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.product-card:hover {
+  border-color: var(--orange);
+  box-shadow: 0 8px 32px rgba(245,197,24,.15);
+  transform: translateY(-3px);
+}
+.product-img-wrap {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  background: var(--mid);
+}
+.product-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .3s;
+}
+.product-card:hover .product-img-wrap img { transform: scale(1.04); }
+.img-count {
+  position: absolute;
+  bottom: .5rem;
+  right: .5rem;
+  background: rgba(0,0,0,.65);
+  color: var(--white);
+  font-size: .75rem;
+  font-weight: 700;
+  padding: .2rem .5rem;
+  border-radius: 4px;
+}
+.product-img-placeholder {
+  width: 100%;
+  height: 200px;
+  background: var(--mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--border);
+}
+.product-body { padding: 1.25rem; }
+.product-sku { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .3rem; }
+.product-name { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: .75rem; line-height: 1.3; }
+.product-price {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--orange);
+}
+.product-price-note { font-size: .8rem; color: var(--muted); font-weight: 400; }
+.product-footer {
+  padding: .75rem 1.25rem 1.25rem;
+  display: flex;
+  gap: .75rem;
+}
+.product-footer .btn { flex: 1; text-align: center; font-size: .85rem; padding: .6rem 1rem; }
+
+/* ===== WHY US ===== */
+.why-us {
+  background: var(--dark);
+  padding: 4rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+.feature-card {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.feature-title { font-weight: 700; color: var(--white); margin-bottom: .5rem; font-size: 1.05rem; }
+.feature-text { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+
+/* ===== CTA BANNER ===== */
+.cta-banner {
+  background: linear-gradient(90deg, var(--orange) 0%, #d9a800 100%);
+  padding: 3rem 0;
+  text-align: center;
+}
+.cta-banner h2 { font-size: 1.8rem; font-weight: 900; color: var(--white); margin-bottom: .75rem; }
+.cta-banner p { color: rgba(255,255,255,.85); margin-bottom: 1.5rem; font-size: 1.05rem; }
+.cta-banner .btn { background: var(--white); color: var(--orange); border-color: var(--white); }
+.cta-banner .btn:hover { background: transparent; color: var(--white); }
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--dark);
+  border-top: 2px solid var(--border);
+  padding: 3rem 0 1.5rem;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2.5rem;
+}
+.footer-brand .logo { margin-bottom: 1rem; }
+.footer-brand p { color: var(--muted); font-size: .9rem; line-height: 1.7; max-width: 300px; }
+.footer-col h4 { color: var(--white); font-weight: 700; margin-bottom: 1rem; font-size: .95rem; text-transform: uppercase; letter-spacing: .05em; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: .5rem; }
+.footer-col ul a { color: var(--muted); font-size: .9rem; }
+.footer-col ul a:hover { color: var(--orange); }
+.footer-contact-item { display: flex; gap: .6rem; align-items: flex-start; margin-bottom: .75rem; color: var(--muted); font-size: .9rem; }
+.footer-contact-item span:first-child { color: var(--orange); flex-shrink: 0; font-size: 1rem; }
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-bottom p { color: var(--muted); font-size: .85rem; }
+
+/* ===== PAGE HERO (inner pages) ===== */
+.page-hero {
+  background: linear-gradient(135deg, var(--black), #13263f);
+  padding: 3rem 0;
+  border-bottom: 3px solid var(--orange);
+}
+.page-hero h1 { font-size: 2.5rem; font-weight: 900; color: var(--white); margin-bottom: .5rem; }
+.page-hero p { color: var(--muted); }
+.breadcrumb { display: flex; gap: .5rem; align-items: center; font-size: .85rem; color: var(--muted); margin-bottom: .75rem; }
+.breadcrumb a { color: var(--muted); }
+.breadcrumb a:hover { color: var(--orange); }
+.breadcrumb-sep { color: var(--border); }
+
+/* ===== SHOP PAGE ===== */
+.shop-section { padding: 3rem 0; }
+.shop-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.shop-controls p { color: var(--muted); font-size: .9rem; }
+.filter-tabs { display: flex; flex-wrap: wrap; gap: .5rem; }
+.filter-tab {
+  padding: .4rem 1rem;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--mid);
+  color: var(--muted);
+  font-size: .85rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.filter-tab:hover, .filter-tab.active { background: var(--orange); color: var(--on-accent); border-color: var(--orange); }
+
+.category-heading {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--white);
+  border-left: 4px solid var(--orange);
+  padding-left: .75rem;
+  margin: 2.5rem 0 1.25rem;
+}
+
+/* ===== CONTACT PAGE ===== */
+.contact-section { padding: 3rem 0; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem; }
+.contact-info-card {
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+.contact-info-card h3 { color: var(--white); font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 700; }
+.info-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-start;
+}
+.info-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(245,197,24,.12);
+  border: 1px solid rgba(245,197,24,.3);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.info-label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .2rem; }
+.info-value { color: var(--white); font-weight: 600; font-size: .95rem; }
+.info-value a { color: var(--orange); }
+
+.contact-form-card {
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+.contact-form-card h3 { color: var(--white); font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 700; }
+.form-group { margin-bottom: 1.25rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: block; color: var(--muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; margin-bottom: .4rem; }
+input, textarea, select {
+  width: 100%;
+  background: var(--mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  padding: .75rem 1rem;
+  font-size: .95rem;
+  font-family: inherit;
+  transition: border-color .2s;
+  outline: none;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--orange); }
+textarea { min-height: 130px; resize: vertical; }
+select option { background: var(--mid); }
+
+/* ===== MOBILE NAV ===== */
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  nav ul {
+    display: none;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: var(--dark);
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    padding: 1rem 0;
+  }
+  nav ul.open { display: flex; }
+  nav ul li { width: 100%; }
+  nav ul a { display: block; padding: .85rem 1.5rem; border-bottom: none !important; }
+  nav ul a:hover { background: var(--mid); }
+
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .hero-stats { gap: 2rem; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HEADER CALL BUTTON + MOBILE REPAIRS
+   ---------------------------------------------------------------------------
+   Until now no page on this site showed a phone number in its header at any
+   width. On a 1366px desktop the first visible number sat 2,373px down a
+   2,858px home page - past all 30 trailer cards - and the sticky call bars
+   were display:none above 600px (home) / 820px (trailer). Every recorded call
+   came from a phone; none from desktop.
+
+   This file is loaded by every page - the home page, trailer.html and its 30
+   generated per-trailer pages, the five generated category pages and the four
+   static pages - so putting the shared rules here reaches all of them at once.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* The header call button. One treatment, used by all three header layouts
+   (.home-nav-links, .t-nav, .p-nav-links). min-height 44px is the minimum
+   comfortable tap target. Hover inverts to BLACK on orange, not white:
+   #ffffff on #f5c518 computes to 2.96:1 and fails WCAG AA, #0d0d0d passes. */
+.hdr-call {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .5rem .85rem; min-height: 44px; box-sizing: border-box;
+  border: 1px solid var(--orange); border-radius: 6px;
+  color: var(--orange); background: transparent;
+  font-size: .875rem; font-weight: 800; letter-spacing: -.01em;
+  text-decoration: none; white-space: nowrap; line-height: 1;
+  transition: background .15s, color .15s;
+}
+.hdr-call:hover,
+.hdr-call:focus-visible { background: var(--orange); color: var(--on-accent); }
+.hdr-call .hdr-call-icon { font-size: .95em; line-height: 1; }
+
+/* The trailer detail header is a three-column bar (back link / logo / contact).
+   The call button goes beside Contact Us and must not squeeze the back link. */
+.t-nav .hdr-call { margin-left: auto; }
+
+@media (max-width: 600px) {
+  /* Making room. At 375px the home header has to hold the badge, the wordmark,
+     Financing, About, Contact Us AND now a phone number. Two things give way:
+     the wordmark drops to just the ATT badge, and "Contact Us" goes - the phone
+     number is a better version of the same thing, so this is a swap, not a loss.
+     Financing and About STAY: they were hidden on phones until now, which is
+     why financing had 1 click in 260 trailer views. */
+  .t-nav-logo .logo-text { display: none; }
+  .home-logo .logo-text,
+  .p-logo .logo-text { display: block; max-width: 7.2rem; font-size: .74rem; line-height: 1.15; }
+
+  .home-nav-links .cta { display: none; }
+
+  .hdr-call { padding: .45rem .6rem; font-size: .8rem; gap: .3rem; }
+
+  .home-nav-links { gap: .6rem; }
+  .home-nav-links a { font-size: .78rem; }
+
+  /* ── The four static pages (about / contact / financing / privacy) ──
+     These carried ZERO media queries. .p-nav was locked to height:60px while
+     the wordmark inside wrapped to three lines and rendered 77px tall, so the
+     logo physically overflowed its own header, and every one of these pages
+     scrolled 66-95px wider than the viewport with the overflow hidden. */
+  /* These selectors are deliberately two levels deep. Each of the four static
+     pages carries its own inline <style> with ".p-nav { height: 60px }", and an
+     inline block loads AFTER css/style.css - so a single-class rule here loses
+     the tie and the nav stays locked at 60px while its contents need 94px,
+     clipping the first row of links to top:-17px.
+     Layout on a phone becomes two rows: badge + call button, then the links. */
+  .p-header .p-nav {
+    height: auto; min-height: 56px;
+    flex-wrap: wrap; align-items: center;
+    padding: .5rem 1rem; gap: .4rem .5rem;
+  }
+  .p-header .p-logo { flex: 0 0 auto; font-size: .9rem; gap: .4rem; }
+  .p-header .hdr-call { margin-left: auto; }
+  .p-header .p-nav-links {
+    flex: 1 0 100%;
+    flex-wrap: nowrap; justify-content: center;
+    gap: 1rem; padding-top: .1rem;
+  }
+  .p-header .p-nav-links a { font-size: .78rem; white-space: nowrap; }
+}
+
+/* The contact page exists to produce phone calls, and at 375px its number was
+   splitting across two lines mid-digits - "519-550-" / "4584". nowrap plus a
+   viewport-scaled size means it can never break again at any width. */
+.phone-number { white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .phone-number { font-size: clamp(1.5rem, 8.5vw, 2.4rem); }
+  .phone-block  { padding: 1.75rem 1.25rem; }
+}
+
+

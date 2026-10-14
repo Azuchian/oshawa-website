@@ -1,0 +1,35 @@
+﻿build.ps1
+watch.ps1
+setup-watcher.ps1
+*.bat
+sites.json
+.watch_activity
+.build_cooldown
+admin.html
+
+# Trailers dragged into "Delete Trailer" are removed from the site.
+# Local only - these must never be published.
+/Delete Trailer/
+/.deploy_state
+/\!!*
+
+# Local build state, never part of the website. The .ok markers record which photos
+# STEP 1 has already compressed; the .attnew/.attold files are the scratch copies
+# STEP 1 swaps a re-encoded photo through. All 245 markers used to be committed and
+# served live at trailers/<folder>/.compressed_<photo>.ok - they were never content.
+.compressed_*.ok
+*.attnew
+*.attold
+test-price.ps1
+
+# Local-only view-count snapshots (never deployed)
+"!! Stats Snapshots"/
+
+# Per-folder marker: which 3D videos the build has already compressed
+.video-optimized
+
+# Oshawa mirror: local state and settings, never published
+/.mirror/
+mirror-settings.txt
+sync-from-azuchians.ps1
+Photo sources.txt

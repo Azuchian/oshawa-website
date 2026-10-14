@@ -1,0 +1,8 @@
+# DEAL OF THE MONTH - comment every line out (or empty the file) to end it.
+# price: -2000 = $2,000 off | -10% = ten percent off | 36469 = flat price
+# ends: the deal switches itself off after this day.
+
+sku:   GHDGF3.1
+price: -2000
+ends:  2026-10-31
+note:  Includes: Safety, Delivery and Spare Tire

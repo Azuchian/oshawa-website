@@ -1,0 +1,21 @@
+﻿name: TA8.5x24'-52 Galvanized Enclosed Cargo
+sku: GCT17
+category: enclosed
+price: 22491
+thumb: main
+specs: 🆕 New 2027 Triumph
+
+GCT17 TA8.5x24'-52 Galvanized Enclosed
+
+Features:
+Side Man Door
+Back Ramp Door
+Tandem 5,200 lb Axles
+Electric Brakes
+GVWR: 9,900 lbs
+Load Rating: 4,015 lbs
+
+🛡️ Warranty:
+Structural: 1 Year
+Axles: 5 Years
+Lights: Lifetime

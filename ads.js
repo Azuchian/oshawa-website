@@ -1,0 +1,144 @@
+/* ============================================================
+   GOOGLE ADS CONVERSION TRACKING
+   ============================================================
+   This tells Google when an ad click turns into a real lead
+   (a phone call or a text), so Google can optimize your $100
+   toward people who actually contact you.
+
+   ─── HOW TO TURN IT ON (one time, after you create the ad) ───
+   1. In Google Ads:  Goals ▸ Conversions ▸ + New conversion action
+      ▸ "Website".  Create TWO actions, for example:
+         • "Phone Call"   (category: Contact / Phone call lead)
+         • "Text Lead"    (category: Submit lead form)
+   2. Google shows a snippet for each that looks like:
+         gtag('event','conversion',{'send_to':'AW-1234567890/AbC-dEfGhIj'})
+      The part before the "/"  is your ACCOUNT ID  -> goes in GADS_ID
+      The part after  the "/"  is the LABEL        -> goes in CONV_CALL / CONV_TEXT
+   3. Fill in the three values below, save, and run build.bat.
+      That's it — tracking goes live automatically.
+
+   Until you fill these in, nothing loads and nothing breaks.
+   ============================================================ */
+
+var GADS_ID   = '';                     // OFF on the Oshawa site - set up its own Google Ads account first        // Google Ads account ID
+var CONV_CALL = '';  // "Trailer – Phone Call" conversion label
+var CONV_TEXT = '';  // "Trailer – Text Lead" conversion label
+
+/* ---- Your own call log (Supabase) ----------------------------------------
+   Records each call-button tap as its own row so the admin dashboard can show
+   WHEN a call happened, from WHICH page, and HOW the visitor arrived
+   (Google ad vs organic search vs Facebook vs direct). Fire-and-forget: it
+   never blocks the phone dialer, and it never logs the owner's own taps.
+   This is the SAME public key already used elsewhere on the site. */
+var SUPA_URL = '';   // OFF on the Oshawa site - views/calls are not counted (needs its own counter set up first)
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqeWJpc2poZWZibWp2eXhqeXB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwODI1NzQsImV4cCI6MjA5NTY1ODU3NH0.dUS4VTPVBp0hULzEiWIppfJSvF0ezXgsYCAkqfjwCqU';
+
+// Figure out how this visitor arrived — captured once and kept for the session,
+// so it's still known by the time they tap Call several pages later.
+(function () {
+  try {
+    if (sessionStorage.getItem('att_src')) return;
+    var q   = new URLSearchParams(location.search);
+    // Check BOTH this page's URL and the referrer — a Google ad click can carry its
+    // markers (gclid / gbraid / wbraid / gad_source / gad_campaignid) on either one,
+    // e.g. when the visitor lands on the homepage then opens a trailer in a new tab.
+    var hay = (location.search + ' ' + document.referrer).toLowerCase();
+    var ref = document.referrer.toLowerCase();
+    var src;
+    if (/(?:^|[?&])(?:gclid|gbraid|wbraid)=/.test(hay) ||
+        hay.indexOf('gad_source') !== -1 || hay.indexOf('gad_campaignid') !== -1) {
+      src = 'Google Ad';                          // paid ad click
+    } else if (q.get('utm_source')) {
+      src = 'utm: ' + q.get('utm_source');
+    } else if (ref.indexOf('google.') !== -1) {
+      src = 'Google (organic)';                   // free Google search result
+    } else if (ref.indexOf('facebook.') !== -1 || ref.indexOf('l.facebook') !== -1 || ref.indexOf('fb.') !== -1) {
+      src = 'Facebook';
+    } else if (document.referrer) {
+      src = document.referrer;                    // some other referring site
+    } else {
+      src = 'Direct / typed in';
+    }
+    sessionStorage.setItem('att_src', src);
+  } catch (e) {}
+})();
+
+// Log one call-button tap. Safe to call anytime; silent if anything fails.
+function logCall(context) {
+  try {
+    if (localStorage.getItem('att_owner') === '1') return;   // skip the owner's own taps
+    var src = '';
+    try { src = sessionStorage.getItem('att_src') || ''; } catch (e) {}
+    if (SUPA_URL) fetch(SUPA_URL + '/rest/v1/call_events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        context:    context || 'call',
+        source:     src,
+        page:       location.pathname,
+        referrer:   document.referrer || '',
+        user_agent: navigator.userAgent || ''
+      })
+    }).catch(function () {});
+  } catch (e) {}
+}
+
+(function () {
+  // Don't load Google's tag until a real ID is entered (avoids errors before launch).
+  // Placeholder = a run of X's (e.g. AW-XXXXXXXXXX); a real ID/label may contain a
+  // single stray "X", so only treat 3+ in a row as "not filled in yet".
+  if (!GADS_ID || GADS_ID.indexOf('AW-') !== 0 || /XXX/.test(GADS_ID)) return;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GADS_ID;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', GADS_ID);
+})();
+
+/* Fire a Google Ads conversion. type = 'call' or 'text'.
+   Safe to call anytime — does nothing until the values above are set. */
+// Count one page view, at most once per visitor per day, using the same
+// localStorage keys as the homepage and trailer pages so one person browsing
+// five category pages is five views, not fifty.
+function trackPage(key, name) {
+  try {
+    if (localStorage.getItem('att_owner') === '1') return;   // skip the owner's own visits
+    var today = new Date().toISOString().slice(0, 10);
+    var seen = {};
+    try { seen = JSON.parse(localStorage.getItem('att_viewed') || '{}'); } catch (e) {}
+    if (seen[key] === today) return;
+    seen[key] = today;
+    try { localStorage.setItem('att_viewed', JSON.stringify(seen)); } catch (e) {}
+    if (SUPA_URL) fetch(SUPA_URL + '/rest/v1/rpc/track_view', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY
+      },
+      body: JSON.stringify({ p_sku: key, p_name: name })
+    }).catch(function () {});
+  } catch (e) {}
+}
+
+// `context` labels WHICH button was tapped (e.g. the autumn sale banner) so the
+// stats page can tell them apart. Left out, it stays plain 'call' as before.
+function adsConversion(type, context) {
+  // Log the call to your own tracker FIRST, so it happens even if Google's tag
+  // is blocked (ad blockers) or hasn't finished loading.
+  if (type === 'call') { try { logCall(context || 'call'); } catch (e) {} }
+  try {
+    if (typeof gtag !== 'function') return;
+    var label = (type === 'call') ? CONV_CALL : (type === 'text') ? CONV_TEXT : '';
+    if (!label || /XXX/.test(label)) return;   // only bail on an unfilled placeholder, not a real label that happens to contain "X"
+    gtag('event', 'conversion', { send_to: GADS_ID + '/' + label });
+  } catch (e) {}
+}
