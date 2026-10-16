@@ -22,7 +22,7 @@
   <meta name="robots" content="noindex, follow" />
   <script type="application/ld+json" id="ld-json"></script>
   <!--THEAD_END-->
-  <link rel="stylesheet" href="css/style.css?v=2088422633" />
+  <link rel="stylesheet" href="css/style.css?v=1078727972" />
   <style>
     html, body { overflow-x: hidden; max-width: 100%; }
     body { background: var(--black); }
@@ -454,8 +454,8 @@
     <button class="lightbox-next" onclick="lightboxNav(1)">›</button>
   </div>
 
-  <script src="ads.js?v=2088422633"></script>
-  <script src="inventory.js?v=2088422633"></script>
+  <script src="ads.js?v=1078727972"></script>
+  <script src="inventory.js?v=1078727972"></script>
   <script>
     let images = [];          // image srcs only (used by the lightbox)
     let media = [];           // ordered gallery items: { type:'video'|'image', src }
@@ -536,7 +536,7 @@
         seen[sku] = today;
         try { localStorage.setItem('att_viewed', JSON.stringify(seen)); } catch (e) {}
 
-        if (false) fetch('https://ljybisjhefbmjvyxjypz.supabase.co/rest/v1/rpc/track_view', {
+        fetch('https://ljybisjhefbmjvyxjypz.supabase.co/rest/v1/rpc/osh_track_view', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -553,7 +553,7 @@
     function trackEvent(key, label) {
       try {
         if (localStorage.getItem('att_owner') === '1') return;
-        if (false) fetch('https://ljybisjhefbmjvyxjypz.supabase.co/rest/v1/rpc/track_view', {
+        fetch('https://ljybisjhefbmjvyxjypz.supabase.co/rest/v1/rpc/osh_track_view', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

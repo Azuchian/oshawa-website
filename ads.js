@@ -30,7 +30,7 @@ var CONV_TEXT = '';  // "Trailer – Text Lead" conversion label
    (Google ad vs organic search vs Facebook vs direct). Fire-and-forget: it
    never blocks the phone dialer, and it never logs the owner's own taps.
    This is the SAME public key already used elsewhere on the site. */
-var SUPA_URL = '';   // OFF on the Oshawa site - views/calls are not counted (needs its own counter set up first)
+var SUPA_URL = 'https://ljybisjhefbmjvyxjypz.supabase.co';   // Oshawa writes to its OWN osh_* tables, never Azuchians'
 var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqeWJpc2poZWZibWp2eXhqeXB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwODI1NzQsImV4cCI6MjA5NTY1ODU3NH0.dUS4VTPVBp0hULzEiWIppfJSvF0ezXgsYCAkqfjwCqU';
 
 // Figure out how this visitor arrived — captured once and kept for the session,
@@ -69,7 +69,7 @@ function logCall(context) {
     if (localStorage.getItem('att_owner') === '1') return;   // skip the owner's own taps
     var src = '';
     try { src = sessionStorage.getItem('att_src') || ''; } catch (e) {}
-    if (SUPA_URL) fetch(SUPA_URL + '/rest/v1/call_events', {
+    fetch(SUPA_URL + '/rest/v1/osh_call_events', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ function trackPage(key, name) {
     if (seen[key] === today) return;
     seen[key] = today;
     try { localStorage.setItem('att_viewed', JSON.stringify(seen)); } catch (e) {}
-    if (SUPA_URL) fetch(SUPA_URL + '/rest/v1/rpc/track_view', {
+    fetch(SUPA_URL + '/rest/v1/rpc/osh_track_view', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
