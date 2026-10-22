@@ -5,5 +5,4 @@
 
 tag:    gooseneck
 price:  -1000
-starts: 2026-11-01
 ends:   2026-11-30
